@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Scoped styles for the generator */
+        #perspective-grid-generator-container {
+            --pgc-primary: #2563eb;
+            --pgc-primary-hover: #1d4ed8;
+            --pgc-bg-main: #f8fafc;
+            --pgc-bg-card: #ffffff;
+            --pgc-text-main: #1e293b;
+            --pgc-text-secondary: #64748b;
+            --pgc-border: #e2e8f0;
+
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem 1rem;
+            background-color: var(--pgc-bg-main);
+            color: var(--pgc-text-main);
+            line-height: 1.5;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        #perspective-grid-generator-container * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        #perspective-grid-generator-container .pgc-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        #perspective-grid-generator-container .pgc-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--pgc-text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        #perspective-grid-generator-container .pgc-header p {
+            color: var(--pgc-text-secondary);
+            font-size: 1.125rem;
+        }
+
+        #perspective-grid-generator-container .pgc-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            #perspective-grid-generator-container .pgc-grid {
+                grid-template-columns: 320px 1fr;
+            }
+        }
+
+        #perspective-grid-generator-container .pgc-card {
+            background: var(--pgc-bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        #perspective-grid-generator-container .pgc-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--pgc-text-secondary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--pgc-border);
+        }
+
+        #perspective-grid-generator-container .pgc-control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        #perspective-grid-generator-container .pgc-control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        #perspective-grid-generator-container label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--pgc-text-main);
+        }
+
+        #perspective-grid-generator-container select {
+            width: 100%;
+            padding: 0.625rem;
+            border: 1px solid var(--pgc-border);
+            border-radius: 0.5rem;
+            background-color: var(--pgc-bg-card);
+            color: var(--pgc-text-main);
+            font-size: 0.875rem;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        #perspective-grid-generator-container select:hover {
+            border-color: var(--pgc-primary);
+        }
+
+        #perspective-grid-generator-container select:focus {
+            outline: none;
+            border-color: var(--pgc-primary);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        #perspective-grid-generator-container .pgc-range-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #perspective-grid-generator-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--pgc-border);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #perspective-grid-generator-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--pgc-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        #perspective-grid-generator-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        #perspective-grid-generator-container .pgc-range-value {
+            min-width: 3rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--pgc-text-secondary);
+            text-align: right;
+        }
+
+        #perspective-grid-generator-container .pgc-switch-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        #perspective-grid-generator-container .pgc-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+        }
+
+        #perspective-grid-generator-container .pgc-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        #perspective-grid-generator-container .pgc-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--pgc-border);
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        #perspective-grid-generator-container .pgc-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        #perspective-grid-generator-container input:checked + .pgc-slider {
+            background-color: var(--pgc-primary);
+        }
+
+        #perspective-grid-generator-container input:checked + .pgc-slider:before {
+            transform: translateX(16px);
+        }
+
+        #perspective-grid-generator-container canvas {
+            width: 100%;
+            border-radius: 0.75rem;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #perspective-grid-generator-container .pgc-button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        #perspective-grid-generator-container .pgc-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #perspective-grid-generator-container .pgc-btn-primary {
+            background-color: var(--pgc-primary);
+            color: white;
+        }
+
+        #perspective-grid-generator-container .pgc-btn-primary:hover {
+            background-color: var(--pgc-primary-hover);
+        }
+
+        #perspective-grid-generator-container .pgc-btn-secondary {
+            background-color: var(--pgc-bg-card);
+            color: var(--pgc-text-main);
+            border: 1px solid var(--pgc-border);
+        }
+
+        #perspective-grid-generator-container .pgc-btn-secondary:hover {
+            background-color: var(--pgc-bg-main);
+            border-color: var(--pgc-primary);
+        }
+
+        #perspective-grid-generator-container .pgc-tooltip {
+            position: relative;
+        }
+
+        #perspective-grid-generator-container .pgc-tooltip .pgc-tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--pgc-text-main);
+            color: white;
+            text-align: center;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.75rem;
+            font-weight: 400;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        #perspective-grid-generator-container .pgc-tooltip:hover .pgc-tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #perspective-grid-generator-container .pgc-vp-controls {
+            background-color: var(--pgc-bg-main);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #perspective-grid-generator-container .pgc-vp-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--pgc-text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        @media print {
+            #perspective-grid-generator-container .pgc-grid,
+            #perspective-grid-generator-container .pgc-button-group {
+                display: none;
+            }
+            #perspective-grid-generator-container {
+                padding: 0;
+            }
+            #perspective-grid-generator-container canvas {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="perspective-grid-generator-container">
+        <header class="pgc-header">
+            <h1>Perspective Grid Generator</h1>
+            <p>Create precise perspective grids for your artwork</p>
+        </header>
+
+        <div class="pgc-grid">
+            <div class="pgc-card">
+                <div class="pgc-control-group">
+                    <div class="pgc-section-title">Presets</div>
+                    <select id="pgc-presets">
+                        <option value="custom">Custom Configuration</option>
+                        <option value="frontview">Front View</option>
+                        <option value="cornerview">Corner View</option>
+                        <option value="birdseye">Bird's Eye View</option>
+                        <option value="wormseye">Worm's Eye View</option>
+                    </select>
+                </div>
+
+                <div class="pgc-control-group">
+                    <div class="pgc-section-title">Grid Configuration</div>
+                    <select id="pgc-activeVPs">
+                        <option value="1">One Point Perspective</option>
+                        <option value="2">Two Point Perspective</option>
+                        <option value="3">Three Point Perspective</option>
+                    </select>
+                </div>
+
+                <div id="pgc-vpControls"></div>
+
+                <div class="pgc-control-group">
+                    <div class="pgc-section-title">Grid Settings</div>
+                    <label for="pgc-gridDensity">Grid Density</label>
+                    <div class="pgc-range-group">
+                        <input type="range" id="pgc-gridDensity" min="2" max="20" value="10">
+                        <span class="pgc-range-value" id="pgc-densityValue">10</span>
+                    </div>
+                </div>
+
+                <div class="pgc-control-group">
+                    <div class="pgc-section-title">Page Options</div>
+                    <label for="pgc-pageSize">Page Size</label>
+                    <select id="pgc-pageSize">
+                        <option value="A4">A4</option>
+                        <option value="A3">A3</option>
+                        <option value="Letter">Letter</option>
+                        <option value="Legal">Legal</option>
+                    </select>
+
+                    <div class="pgc-switch-container">
+                        <label class="pgc-switch">
+                            <input type="checkbox" id="pgc-landscape">
+                            <span class="pgc-slider"></span>
+                        </label>
+                        <label for="pgc-landscape">Landscape Mode</label>
+                    </div>
+                </div>
+
+                <div class="pgc-control-group">
+                    <div class="pgc-section-title">Display Options</div>
+                    <div class="pgc-switch-container">
+                        <label class="pgc-switch">
+                            <input type="checkbox" id="pgc-showGrid" checked>
+                            <span class="pgc-slider"></span>
+                        </label>
+                        <label for="pgc-showGrid">Show Background Grid</label>
+                    </div>
+
+                    <div class="pgc-switch-container">
+                        <label class="pgc-switch">
+                            <input type="checkbox" id="pgc-showHorizon" checked>
+                            <span class="pgc-slider"></span>
+                        </label>
+                        <label for="pgc-showHorizon">Show Horizon Line</label>
+                    </div>
+
+                    <div id="pgc-horizonControls">
+                        <label for="pgc-horizonY">Horizon Line Position</label>
+                        <div class="pgc-range-group">
+                            <input type="range" id="pgc-horizonY" min="0" max="100" value="50">
+                            <span class="pgc-range-value" id="pgc-horizonYValue">50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pgc-card">
+                <canvas id="pgc-gridCanvas"></canvas>
+            </div>
+        </div>
+
+        <div class="pgc-button-group">
+            <button onclick="pgc_printGrid()" class="pgc-btn pgc-btn-primary pgc-tooltip">
+                Print Grid
+                <span class="pgc-tooltiptext">Print your perspective grid</span>
+            </button>
+            <button onclick="pgc_savePNG()" class="pgc-btn pgc-btn-secondary pgc-tooltip">
+                Save as PNG
+                <span class="pgc-tooltiptext">Download as PNG image</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const pageSizes = {
+                A4: { width: 210, height: 297 },
+                A3: { width: 297, height: 420 },
+                Letter: { width: 216, height: 279 },
+                Legal: { width: 216, height: 356 }
+            };
+
+            const canvas = document.getElementById('pgc-gridCanvas');
+            const ctx = canvas.getContext('2d');
+
+            let vanishingPoints = [
+                { x: 50, y: 50 },
+                { x: 25, y: 50 },
+                { x: 75, y: 50 }
+            ];
+
+            let showHorizon = true;
+            let showGrid = true;
+            let horizonY = 50;
+
+            const presetConfigurations = {
+                frontview: {
+                    vps: [
+                        { x: 50, y: 50 }
+                    ],
+                    vpCount: 1,
+                    horizonY: 50
+                },
+                cornerview: {
+                    vps: [
+                        { x: 20, y: 50 },
+                        { x: 80, y: 50 }
+                    ],
+                    vpCount: 2,
+                    horizonY: 50
+                },
+                birdseye: {
+                    vps: [
+                        { x: 20, y: 70 },
+                        { x: 80, y: 70 },
+                        { x: 50, y: 120 }
+                    ],
+                    vpCount: 3,
+                    horizonY: 70
+                },
+                wormseye: {
+                    vps: [
+                        { x: 20, y: 30 },
+                        { x: 80, y: 30 },
+                        { x: 50, y: -20 }
+                    ],
+                    vpCount: 3,
+                    horizonY: 30
+                }
+            };
+
+            function updateVPControls() {
+                const activeVPs = parseInt(document.getElementById('pgc-activeVPs').value);
+                const vpControlsDiv = document.getElementById('pgc-vpControls');
+                vpControlsDiv.innerHTML = '';
+
+                for (let i = 0; i < activeVPs; i++) {
+                    const vpDiv = document.createElement('div');
+                    vpDiv.className = 'pgc-vp-controls';
+                    vpDiv.innerHTML = `
+                        <div class="pgc-vp-title">Vanishing Point ${i + 1}</div>
+                        <div class="pgc-control-group">
+                            <label>X Position: <span id="pgc-vpX${i}Value">${vanishingPoints[i].x}</span>%</label>
+                            <div class="pgc-range-group">
+                                <input type="range" id="pgc-vpX${i}" min="0" max="100" value="${vanishingPoints[i].x}">
+                            </div>
+                        </div>
+                        <div class="pgc-control-group">
+                            <label>Y Position: <span id="pgc-vpY${i}Value">${vanishingPoints[i].y}</span>%</label>
+                            <div class="pgc-range-group">
+                                <input type="range" id="pgc-vpY${i}" min="0" max="100" value="${vanishingPoints[i].y}">
+                            </div>
+                        </div>
+                    `;
+                    vpControlsDiv.appendChild(vpDiv);
+
+                    document.getElementById(`pgc-vpX${i}`).addEventListener('input', (e) => {
+                        vanishingPoints[i].x = parseInt(e.target.value);
+                        document.getElementById(`pgc-vpX${i}Value`).textContent = e.target.value;
+                        drawGrid();
+                    });
+
+                    document.getElementById(`pgc-vpY${i}`).addEventListener('input', (e) => {
+                        vanishingPoints[i].y = parseInt(e.target.value);
+                        document.getElementById(`pgc-vpY${i}Value`).textContent = e.target.value;
+                        drawGrid();
+                    });
+                }
+            }
+
+            function drawGrid() {
+                const pageSize = document.getElementById('pgc-pageSize').value;
+                const isLandscape = document.getElementById('pgc-landscape').checked;
+                const activeVPs = parseInt(document.getElementById('pgc-activeVPs').value);
+                const gridDensity = parseInt(document.getElementById('pgc-gridDensity').value);
+
+                let { width, height } = pageSizes[pageSize];
+                if (isLandscape) {
+                    [width, height] = [height, width];
+                }
+
+                const scale = Math.min(800 / width, 600 / height);
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (showGrid) {
+                    ctx.strokeStyle = '#ddd';
+                    ctx.lineWidth = 0.5;
+
+                    for (let i = 0; i <= gridDensity; i++) {
+                        const x = (canvas.width / gridDensity) * i;
+                        const y = (canvas.height / gridDensity) * i;
+
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, canvas.height);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(canvas.width, y);
+                        ctx.stroke();
+                    }
+                }
+
+                if (showHorizon) {
+                    ctx.strokeStyle = '#888';
+                    ctx.lineWidth = 2;
+                    const horizonLineY = canvas.height * (horizonY / 100);
+                    ctx.beginPath();
+                    ctx.moveTo(0, horizonLineY);
+                    ctx.lineTo(canvas.width, horizonLineY);
+                    ctx.stroke();
+                }
+
+                const colors = ['#ef4444', '#22c55e', '#3b82f6'];
+                ctx.lineWidth = 1;
+
+                for (let i = 0; i < activeVPs; i++) {
+                    const vpX = canvas.width * (vanishingPoints[i].x / 100);
+                    const vpY = canvas.height * (vanishingPoints[i].y / 100);
+
+                    ctx.strokeStyle = colors[i] + '80';
+
+                    for (let j = 0; j <= gridDensity; j++) {
+                        const x = (canvas.width / gridDensity) * j;
+                        const y = (canvas.height / gridDensity) * j;
+
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(vpX, vpY);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(canvas.width, y);
+                        ctx.lineTo(vpX, vpY);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(vpX, vpY);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(x, canvas.height);
+                        ctx.lineTo(vpX, vpY);
+                        ctx.stroke();
+                    }
+
+                    ctx.fillStyle = colors[i];
+                    ctx.beginPath();
+                    ctx.arc(vpX, vpY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function applyPreset(presetName) {
+                if (presetName === 'custom') return;
+
+                const preset = presetConfigurations[presetName];
+                vanishingPoints = [...preset.vps];
+                document.getElementById('pgc-activeVPs').value = preset.vpCount;
+                horizonY = preset.horizonY;
+                document.getElementById('pgc-horizonY').value = preset.horizonY;
+                document.getElementById('pgc-horizonYValue').textContent = preset.horizonY + '%';
+                
+                updateVPControls();
+                drawGrid();
+            }
+
+            function pgc_printGrid() {
+                const dataUrl = canvas.toDataURL('image/png');
+                const windowContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Print Perspective Grid</title>
+                        <style>
+                            body { margin: 0; }
+                            img { width: 100%; height: auto; }
+                            @media print {
+                                img { max-width: 100%; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${dataUrl}" alt="Perspective Grid">
+                    </body>
+                    </html>
+                `;
+                const printWindow = window.open('', '', 'width=800,height=600');
+                printWindow.document.write(windowContent);
+                printWindow.document.close();
+                printWindow.focus();
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 250);
+            }
+
+            function pgc_savePNG() {
+                const link = document.createElement('a');
+                link.download = `perspective-grid-${new Date().toISOString().slice(0,10)}.png`;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Event Listeners
+            document.getElementById('pgc-presets').addEventListener('change', (e) => {
+                applyPreset(e.target.value);
+            });
+
+            document.getElementById('pgc-activeVPs').addEventListener('change', () => {
+                updateVPControls();
+                drawGrid();
+            });
+
+            document.getElementById('pgc-gridDensity').addEventListener('input', (e) => {
+                document.getElementById('pgc-densityValue').textContent = e.target.value;
+                drawGrid();
+            });
+
+            document.getElementById('pgc-pageSize').addEventListener('change', drawGrid);
+            document.getElementById('pgc-landscape').addEventListener('change', drawGrid);
+
+            document.getElementById('pgc-showHorizon').addEventListener('change', (e) => {
+                showHorizon = e.target.checked;
+                document.getElementById('pgc-horizonControls').style.display = showHorizon ? 'block' : 'none';
+                drawGrid();
+            });
+
+            document.getElementById('pgc-showGrid').addEventListener('change', (e) => {
+                showGrid = e.target.checked;
+                drawGrid();
+            });
+
+            document.getElementById('pgc-horizonY').addEventListener('input', (e) => {
+                horizonY = parseInt(e.target.value);
+                document.getElementById('pgc-horizonYValue').textContent = horizonY + '%';
+                drawGrid();
+            });
+
+            // Initialize
+            updateVPControls();
+            drawGrid();
+
+            // Expose print and save functions to global scope
+            window.pgc_printGrid = pgc_printGrid;
+            window.pgc_savePNG = pgc_savePNG;
+        })();
+    </script>
+</body>
+</html>
+
